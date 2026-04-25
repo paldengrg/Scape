@@ -1,0 +1,42 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  margin-bottom: 48px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: var(--primary-dark-green);
+  font-family: var(--font-inter), sans-serif;
+  letter-spacing: 2px;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 24px;
+}
+
+.content h2 {
+  font-size: 4rem;
+  color: var(--text-dark);
+}
+
+.content p {
+  font-size: 1.25rem;
+  color: var(--text-dark);
+  max-width: 600px;
+}
