@@ -1,0 +1,48 @@
+You are an expert in web developing . You need to help me setup project named 'scape' according to the following requirements.
+Scape is a web app that allows users to find various chill spots hiking terrains near them . 
+This website will be based in sydney so we will be using sydney map and it's outskirts. 
+This app will be a responsive app where people can upload blogs, posts and photos .
+We need a login and signup page and also a forgot password page. 
+Homescreen should contain a row of containers containing picture of the spot.
+When we click the container a details page should open with its route from current location. 
+A map should also be displayed in the homescreen showing all the spots.
+Download all necessary extensions and tools 
+Don't be afraid to challenge my selections and suggest me what you think would be better to use for the app. 
+
+Problem statement of the website :
+        When living in a bustling metropolis such as Sydney, people tend to find chances
+        to connect with nature and have an activity outside, as well as to get a peaceful spot to
+        rest. Hiking trails, coastal walks, parks, and scenic viewpoints in Sydney are very diverse
+        with Bondi to Coogee Coastal Walk and Royal National Park being some of them.
+        Nevertheless, it is impossible to visit such a large number of places and still find the
+        right hiking and relaxation spots because this issue poses a challenge to many users.
+        The data on these locations usually exists in pieces on various platforms, such as travel
+        blogs, social networks, and various mapping platforms, none of which is specifically
+        oriented toward outdoor adventure.
+        The current mapping apps are more of navigation apps, not experiences. They
+        usually do not have rich user friendly information like trail level, time estimation,
+        facilities around, or even whether that trail is suitable in a given activity like picnic or
+        relaxation. Due to this, the users, in particular, the students, tourists, and new residents
+        might struggle to pinpoint the locations according to their preferences, time-related
+        concerns, or the level of fitness. It may result in ineffective planning, the loss of the
+        opportunity to visit local natural attractions, and decreased satisfaction of the user, in
+        general.
+
+Purpose of the website : 
+        The purpose of this project is to overcome these difficulties by creating an
+interactive web-based application which will be able to offer the viewer a convenient
+and in-depth map of hiking and relaxation locations in Sydney. The site will provide the
+user with the opportunity to learn about outdoor activities easily by navigating curated
+places, accessing the information needed, and making sufficient choices. The
+proposed solution will improve the way people explore and enjoy outdoor spaces in
+Sydney by putting usability, accessibility, and meaningful data visualization together.
+
+Vibe of the Website : 
+        A calming and relaxing vibe with aesthetically pleasing visuals.
+        Colors:  I have created a logo in the folder Logo. Used those colours as the primary colour. Additionally the colours used in the website will be light shades of green and blue and white. 
+        Typography: Use a clean and modern font. 
+        Background: Use a high quality image of nature as the background and it should be blurred so that the contents in the front will be visible clearly.
+
+The tools that i've mentioned in What_to_use.md are just suggestions. You can use other tools if you think they are better for the project.
+This is the initiation of the project we will improve as we go . 
+Also I am a student so build this project in a way like you are teaching me as you build.

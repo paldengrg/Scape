@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { PrismaLibSql } from '@prisma/adapter-libsql'
+import { createClient } from '@libsql/client'
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
+const libsql = createClient({
+  url: 'file:./dev.db',
+})
+const prismaAdapter = new PrismaLibSql(libsql)
+const prisma = new PrismaClient({ adapter: prismaAdapter })
 
 export async function POST(request: Request) {
   try {
