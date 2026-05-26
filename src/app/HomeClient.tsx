@@ -5,6 +5,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import styles from "./home.module.css";
 import ScapeMap from "@/components/Map";
+import SafeImage from "@/components/SafeImage";
 import { 
   Heart, 
   Search, 
@@ -142,25 +143,46 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
     setBlogError("");
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async () => {
+        try {
+          const base64Data = reader.result as string;
+          const res = await fetch("/api/blogs/upload", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              file: base64Data,
+              filename: file.name
+            }),
+          });
 
-      const res = await fetch("/api/blogs/upload", {
-        method: "POST",
-        body: formData,
-      });
+          if (!res.ok) {
+            throw new Error("Failed to upload image");
+          }
 
-      if (!res.ok) {
-        throw new Error("Failed to upload image");
-      }
-
-      const data = await res.json();
-      setBlogImageUrl(data.url);
+          const data = await res.json();
+          setBlogImageUrl(data.url);
+        } catch (err: any) {
+          setBlogError(err.message || "Image upload failed");
+          setBlogImagePreview(null);
+          setBlogImageFile(null);
+        } finally {
+          setIsUploading(false);
+        }
+      };
+      reader.onerror = () => {
+        setBlogError("Failed to read file");
+        setBlogImagePreview(null);
+        setBlogImageFile(null);
+        setIsUploading(false);
+      };
     } catch (err: any) {
       setBlogError(err.message || "Image upload failed");
       setBlogImagePreview(null);
       setBlogImageFile(null);
-    } finally {
       setIsUploading(false);
     }
   };
@@ -228,7 +250,7 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
         <nav className={styles.navLinks}>
           <a href="#explore">Explore</a>
           <a href="#favorites">Favorites</a>
-          {session && <a href="#blogs">Blogs</a>}
+          <a href="#blogs">Blogs</a>
           <a href="#about">About</a>
           <a href="#socials">Socials</a>
         </nav>
@@ -300,7 +322,7 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
                   className={`${styles.spotListItem} ${selectedSpot?.id === spot.id ? styles.selectedItem : ''}`}
                   onClick={() => setSelectedSpot(spot)}
                 >
-                  <img src={spot.imageUrl} alt={spot.name} className={styles.listItemImage} />
+                  <SafeImage src={spot.imageUrl || undefined} alt={spot.name} className={styles.listItemImage} />
                   <div className={styles.listItemInfo}>
                     <div className={styles.listItemHeader}>
                       <h3>{spot.name}</h3>
@@ -358,7 +380,7 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
             {favoritedSpotsList.map(spot => (
               <div key={spot.id} className={`glass-panel ${styles.favCard}`}>
                 <div className={styles.favCardImageContainer}>
-                  <img src={spot.imageUrl} alt={spot.name} />
+                  <SafeImage src={spot.imageUrl || undefined} alt={spot.name} />
                   <button 
                     onClick={(e) => toggleFavorite(spot.id, e)}
                     className={styles.favCardHeart}
@@ -430,7 +452,7 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
                 <label>Blog Picture</label>
                 {blogImagePreview ? (
                   <div className={styles.imagePreviewContainer}>
-                    <img src={blogImagePreview} alt="Blog preview" />
+                    <SafeImage src={blogImagePreview} alt="Blog preview" />
                     <button 
                       type="button" 
                       onClick={handleRemoveImage}
@@ -489,7 +511,7 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
             blogs.map((blog) => (
               <Link href={`/blog/${blog.id}`} key={blog.id} className={styles.blogCard}>
                 <div className={styles.blogCardImageContainer}>
-                  <img src={blog.imageUrl} alt={blog.title} />
+                  <SafeImage src={blog.imageUrl} alt={blog.title} />
                 </div>
                 <div className={styles.blogCardContent}>
                   <h3>{blog.title}</h3>
@@ -607,6 +629,7 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
               <ul>
                 <li><a href="#explore">Explore Terrain</a></li>
                 <li><a href="#favorites">Favorites</a></li>
+                <li><a href="#blogs">Nature Blogs</a></li>
                 <li><a href="#about">About Scape</a></li>
                 <li><a href="#socials">Community Socials</a></li>
               </ul>

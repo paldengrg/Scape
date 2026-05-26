@@ -13,7 +13,7 @@ export const dummySpots = [
     description: "The world's second oldest national park. Great for hiking, swimming, and picnicking.",
     latitude: -34.1200,
     longitude: 151.0667,
-    imageUrl: "https://images.unsplash.com/photo-1615456209689-0b190f7dcc13?q=80&w=600&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=600&auto=format&fit=crop",
   },
   {
     id: "3",
@@ -29,6 +29,6 @@ export const dummySpots = [
     description: "A grand, 189-hectare park in the Eastern Suburbs of Sydney.",
     latitude: -33.8988,
     longitude: 151.2335,
-    imageUrl: "https://images.unsplash.com/photo-1596700683935-7c98031e42c2?q=80&w=600&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1519331379826-f10be5486c6f?q=80&w=600&auto=format&fit=crop",
   }
 ];
