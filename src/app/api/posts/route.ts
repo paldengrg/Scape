@@ -1,15 +1,7 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client"
-import { PrismaLibSql } from '@prisma/adapter-libsql'
-import { createClient } from '@libsql/client'
+import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { dummySpots } from "@/lib/dummyData";
-
-const libsql = createClient({
-  url: 'file:./dev.db',
-})
-const prismaAdapter = new PrismaLibSql(libsql)
-const prisma = new PrismaClient({ adapter: prismaAdapter })
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
