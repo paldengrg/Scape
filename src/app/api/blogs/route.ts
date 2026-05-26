@@ -21,7 +21,7 @@ export async function GET() {
           {
             title: "Exploring the Royal National Park Coastline",
             description: "If you are looking for an escape from the city, the coastal walk at Royal National Park is unmatched. From the beautiful sandstone cliffs to the secret swimming pools, it's a paradise. Be sure to bring plenty of water and a camera to capture the breathtaking lookouts!",
-            imageUrl: "https://images.unsplash.com/photo-1615456209689-0b190f7dcc13?q=80&w=800&auto=format&fit=crop",
+            imageUrl: "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=800&auto=format&fit=crop",
             authorId: user.id
           },
           {

@@ -10,20 +10,35 @@ export async function POST(request: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const formData = await request.formData();
-    const file = formData.get("file") as File;
-    if (!file) {
-      return new NextResponse("No file uploaded", { status: 400 });
+    let buffer: Buffer;
+    let filename: string;
+
+    const contentType = request.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      const body = await request.json();
+      const { file, filename: providedFilename } = body;
+      if (!file) {
+        return new NextResponse("No file uploaded", { status: 400 });
+      }
+      const base64Data = file.split(";base64,").pop();
+      buffer = Buffer.from(base64Data, "base64");
+      filename = providedFilename || "uploaded_image.png";
+    } else {
+      const formData = await request.formData();
+      const file = formData.get("file") as File;
+      if (!file) {
+        return new NextResponse("No file uploaded", { status: 400 });
+      }
+      buffer = Buffer.from(await file.arrayBuffer());
+      filename = file.name;
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    
     // Create upload directory in public if it doesn't exist
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     await mkdir(uploadDir, { recursive: true });
 
     // Generate unique name
-    const uniqueFilename = `${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
+    const uniqueFilename = `${Date.now()}-${filename.replace(/\s+/g, "_")}`;
     const filePath = path.join(uploadDir, uniqueFilename);
     
     await writeFile(filePath, buffer);
