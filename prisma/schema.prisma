@@ -19,6 +19,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
+  blogs         Blog[]
 }
 
 model Account {
@@ -78,4 +79,15 @@ model Post {
 
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   spot   Spot @relation(fields: [spotId], references: [id], onDelete: Cascade)
+}
+
+model Blog {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String
+  authorId    String
+  createdAt   DateTime @default(now())
+
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }

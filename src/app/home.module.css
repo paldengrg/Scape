@@ -860,3 +860,335 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* 8. Blogs Section */
+.blogsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.blogsHeaderArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.blogsHeaderArea .sectionHeader {
+  margin: 0;
+  text-align: left;
+}
+
+.uploadBlogBtn {
+  background-color: var(--primary-dark-green);
+  color: var(--white);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(62, 90, 68, 0.2);
+}
+
+.uploadBlogBtn:hover {
+  background-color: var(--light-green);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(138, 154, 91, 0.3);
+}
+
+.blogFormContainer {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 24px;
+  animation: fadeInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.blogForm {
+  display: grid;
+  gap: 20px;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formRow label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  letter-spacing: 0.5px;
+}
+
+.formRow input[type="text"],
+.formRow textarea {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.9);
+  outline: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  color: var(--text-dark);
+}
+
+.formRow input[type="text"]:focus,
+.formRow textarea:focus {
+  border-color: var(--primary-dark-green);
+  box-shadow: 0 0 0 3px rgba(62, 90, 68, 0.15);
+  background: var(--white);
+}
+
+.fileUploadArea {
+  border: 2px dashed rgba(62, 90, 68, 0.25);
+  border-radius: 12px;
+  padding: 28px 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.fileUploadArea:hover {
+  border-color: var(--primary-dark-green);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.fileUploadArea input[type="file"] {
+  display: none;
+}
+
+.uploadIcon {
+  color: var(--primary-dark-green);
+  transition: transform 0.2s ease;
+}
+
+.fileUploadArea:hover .uploadIcon {
+  transform: translateY(-2px);
+}
+
+.uploadText {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.uploadHint {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.imagePreviewContainer {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 8px auto 0 auto;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.imagePreviewContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.removeImageBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--white);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.removeImageBtn:hover {
+  background: rgba(220, 53, 69, 0.95);
+  transform: scale(1.05);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.submitBtn {
+  background-color: var(--primary-dark-green);
+  color: var(--white);
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(62, 90, 68, 0.15);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background-color: var(--light-green);
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.cancelBtn {
+  background-color: transparent;
+  color: var(--text-dark);
+  border: 1px solid rgba(0,0,0,0.15);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelBtn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.blogsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+  margin-top: 12px;
+}
+
+.blogCard {
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+}
+
+.blogCard:hover {
+  transform: translateY(-6px);
+  background: var(--white);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.07);
+  border-color: rgba(62, 90, 68, 0.25);
+}
+
+.blogCardImageContainer {
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+.blogCardImageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.blogCard:hover .blogCardImageContainer img {
+  transform: scale(1.06);
+}
+
+.blogCardContent {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 12px;
+}
+
+.blogCardContent h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary-dark-green);
+  line-height: 1.35;
+}
+
+.blogCardDescription {
+  font-size: 0.9rem;
+  color: #4A5568;
+  margin: 0;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.blogCardMeta {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: #666;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 14px;
+}
+
+.blogCardAuthor {
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.blogCardDate {
+  opacity: 0.85;
+  font-weight: 500;
+}
+

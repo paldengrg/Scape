@@ -115,9 +115,10 @@ export default function SpotDetailsPage() {
         tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
         tileSize: 256,
         attribution: '&copy; OpenStreetMap Contributors',
+        maxzoom: 19
       }
     },
-    layers: [{ id: 'osm', type: 'raster', source: 'osm', minzoom: 0, maxzoom: 22 }]
+    layers: [{ id: 'osm', type: 'raster', source: 'osm', minzoom: 0, maxzoom: 19 }]
   };
 
   return (

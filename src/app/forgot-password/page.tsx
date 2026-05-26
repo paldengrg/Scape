@@ -113,10 +113,10 @@ export default function ForgotPasswordPage() {
               color: "#2e7d32",
               background: "#edf7ed",
               padding: "12px",
-              border_radius: "8px",
-              font_size: "0.9rem",
-              text_align: "center",
-              margin_bottom: "8px"
+              borderRadius: "8px",
+              fontSize: "0.9rem",
+              textAlign: "center",
+              marginBottom: "8px"
             }}
           >
             {success}

@@ -104,6 +104,119 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
     }
   };
 
+  // Blog states
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [blogTitle, setBlogTitle] = useState("");
+  const [blogDescription, setBlogDescription] = useState("");
+  const [blogImageFile, setBlogImageFile] = useState<File | null>(null);
+  const [blogImagePreview, setBlogImagePreview] = useState<string | null>(null);
+  const [blogImageUrl, setBlogImageUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSubmittingBlog, setIsSubmittingBlog] = useState(false);
+  const [blogError, setBlogError] = useState("");
+
+  const fetchBlogs = async () => {
+    try {
+      const res = await fetch("/api/blogs");
+      if (res.ok) {
+        const data = await res.json();
+        setBlogs(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch blogs", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setBlogImageFile(file);
+    setBlogImagePreview(URL.createObjectURL(file));
+    setIsUploading(true);
+    setBlogError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/blogs/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      const data = await res.json();
+      setBlogImageUrl(data.url);
+    } catch (err: any) {
+      setBlogError(err.message || "Image upload failed");
+      setBlogImagePreview(null);
+      setBlogImageFile(null);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleBlogSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!blogTitle.trim() || !blogDescription.trim() || !blogImageUrl) {
+      setBlogError("Please fill out all fields and upload an image.");
+      return;
+    }
+
+    setIsSubmittingBlog(true);
+    setBlogError("");
+
+    try {
+      const res = await fetch("/api/blogs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: blogTitle,
+          description: blogDescription,
+          imageUrl: blogImageUrl,
+        }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText || "Failed to create blog post");
+      }
+
+      // Reset form
+      setBlogTitle("");
+      setBlogDescription("");
+      setBlogImageFile(null);
+      setBlogImagePreview(null);
+      setBlogImageUrl(null);
+      setIsFormOpen(false);
+
+      // Refresh blogs list
+      fetchBlogs();
+    } catch (err: any) {
+      setBlogError(err.message || "An error occurred.");
+    } finally {
+      setIsSubmittingBlog(false);
+    }
+  };
+
+  const handleRemoveImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setBlogImageFile(null);
+    setBlogImagePreview(null);
+    setBlogImageUrl(null);
+  };
+
   return (
     <main className={styles.main}>
       {/* 1. Transparent Header / Navigation */}
@@ -115,6 +228,7 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
         <nav className={styles.navLinks}>
           <a href="#explore">Explore</a>
           <a href="#favorites">Favorites</a>
+          {session && <a href="#blogs">Blogs</a>}
           <a href="#about">About</a>
           <a href="#socials">Socials</a>
         </nav>
@@ -263,6 +377,140 @@ export default function ScapeHomeClient({ session, dummySpots }: HomeClientProps
             ))}
           </div>
         )}
+      </section>
+
+      {/* 4.5 Blogs Section */}
+      <section id="blogs" className={styles.blogsSection}>
+        <div className={styles.blogsHeaderArea}>
+          <div className={styles.sectionHeader}>
+            <h2>Nature Blogs & Stories</h2>
+            <p>Discover experiences, guides, and stories shared by Sydney outdoor enthusiasts.</p>
+          </div>
+          {session && (
+            <button 
+              className={styles.uploadBlogBtn}
+              onClick={() => setIsFormOpen(!isFormOpen)}
+            >
+              <Sparkles size={16} style={{ marginRight: "6px" }} /> {isFormOpen ? "Cancel" : "Upload Blog"}
+            </button>
+          )}
+        </div>
+
+        {isFormOpen && session && (
+          <div className={styles.blogFormContainer}>
+            <form onSubmit={handleBlogSubmit} className={styles.blogForm}>
+              <h3 style={{ margin: "0 0 10px 0", color: "var(--primary-dark-green)" }}>Share Your Adventure</h3>
+              {blogError && <div style={{ color: "red", fontSize: "0.9rem", marginBottom: "10px" }}>{blogError}</div>}
+              
+              <div className={styles.formRow}>
+                <label htmlFor="blog-title">Title</label>
+                <input 
+                  id="blog-title"
+                  type="text"
+                  placeholder="Give your blog a catchy title..."
+                  value={blogTitle}
+                  onChange={e => setBlogTitle(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className={styles.formRow}>
+                <label htmlFor="blog-description">Description</label>
+                <textarea 
+                  id="blog-description"
+                  placeholder="Write your experience, tips, and guidelines..."
+                  rows={5}
+                  value={blogDescription}
+                  onChange={e => setBlogDescription(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className={styles.formRow}>
+                <label>Blog Picture</label>
+                {blogImagePreview ? (
+                  <div className={styles.imagePreviewContainer}>
+                    <img src={blogImagePreview} alt="Blog preview" />
+                    <button 
+                      type="button" 
+                      onClick={handleRemoveImage}
+                      className={styles.removeImageBtn}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ) : (
+                  <label className={styles.fileUploadArea}>
+                    <TreePine className={styles.uploadIcon} size={28} />
+                    <span className={styles.uploadText}>
+                      {isUploading ? "Uploading..." : "Click to select a picture"}
+                    </span>
+                    <span className={styles.uploadHint}>Supports JPG, PNG, GIF files</span>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      disabled={isUploading}
+                    />
+                  </label>
+                )}
+              </div>
+
+              <div className={styles.formActions}>
+                <button 
+                  type="button" 
+                  className={styles.cancelBtn}
+                  onClick={() => {
+                    setIsFormOpen(false);
+                    setBlogError("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className={styles.submitBtn}
+                  disabled={isUploading || isSubmittingBlog || !blogImageUrl}
+                >
+                  {isSubmittingBlog ? "Posting..." : "Post Blog"}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        <div className={styles.blogsGrid}>
+          {blogs.length === 0 ? (
+            <div className={`glass-panel ${styles.emptyFavorites}`} style={{ width: "100%", gridColumn: "1 / -1" }}>
+              <h3>No blog posts yet</h3>
+              <p>Be the first to share your experience by logging in and posting a blog!</p>
+            </div>
+          ) : (
+            blogs.map((blog) => (
+              <Link href={`/blog/${blog.id}`} key={blog.id} className={styles.blogCard}>
+                <div className={styles.blogCardImageContainer}>
+                  <img src={blog.imageUrl} alt={blog.title} />
+                </div>
+                <div className={styles.blogCardContent}>
+                  <h3>{blog.title}</h3>
+                  <p className={styles.blogCardDescription}>{blog.description}</p>
+                  <div className={styles.blogCardMeta}>
+                    <span className={styles.blogCardAuthor}>
+                      By {blog.author?.name || "Explorer"}
+                    </span>
+                    <span className={styles.blogCardDate}>
+                      {new Date(blog.createdAt).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))
+          )}
+        </div>
       </section>
 
       {/* 5. About Section */}
