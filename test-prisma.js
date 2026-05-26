@@ -4,10 +4,9 @@ const { PrismaClient } = require('@prisma/client');
 const { PrismaLibSql } = require('@prisma/adapter-libsql');
 const { createClient } = require('@libsql/client');
 
-const libsql = createClient({
+const adapter = new PrismaLibSql({
   url: 'file:///C:/Users/kazama/Desktop/Scape/dev.db',
 });
-const adapter = new PrismaLibSql(libsql);
 const prisma = new PrismaClient({ adapter });
 
 async function test() {

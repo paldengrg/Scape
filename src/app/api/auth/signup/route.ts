@@ -1,21 +1,13 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { PrismaLibSql } from '@prisma/adapter-libsql'
-import { createClient } from '@libsql/client'
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
-
-const libsql = createClient({
-  url: 'file:./dev.db',
-})
-const prismaAdapter = new PrismaLibSql(libsql)
-const prisma = new PrismaClient({ adapter: prismaAdapter })
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, name, password } = body;
+    const { email, name, password, securityQuestion, securityAnswer } = body;
 
-    if (!email || !name || !password) {
+    if (!email || !name || !password || !securityQuestion || !securityAnswer) {
       return new NextResponse("Missing fields", { status: 400 });
     }
 
@@ -30,12 +22,16 @@ export async function POST(request: Request) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const normalizedAnswer = securityAnswer.trim().toLowerCase();
+    const hashedAnswer = await bcrypt.hash(normalizedAnswer, 10);
 
     const user = await prisma.user.create({
       data: {
         name,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        securityQuestion,
+        securityAnswer: hashedAnswer
       }
     });
 
